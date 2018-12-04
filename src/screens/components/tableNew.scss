@@ -1,0 +1,38 @@
+.card {
+  margin: 15px 0;
+  padding: 15px 20px;
+  border-radius: 6px;
+  background-color: #fdfdfd;
+  border: 1px solid #f8f8f8;
+  box-shadow: 0 3px 5px rgba(122, 122, 122, 0.05);
+
+  &:hover {
+    cursor: pointer;
+    border-color: #fdfdfd;
+    background-color: #f8f8f8;
+    transition: all 150ms ease-in-out;
+    box-shadow: 0 3px 10px rgba(122, 122, 122, 0.18);
+  }
+
+  & .status {
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    margin-left: -3px;
+    border-radius: 50%;
+    position: absolute;
+
+    &.good {
+      background-color: rgb(25, 204, 25);
+    }
+  }
+
+  & .title {
+    display: block;
+    color: rgb(187, 187, 187);
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+}
