@@ -13,10 +13,6 @@
     box-shadow: 0 3px 10px rgba(122, 122, 122, 0.18);
   }
 
-  & .clickable {
-    cursor: pointer;
-  }
-
   & .status {
     width: 6px;
     height: 6px;
@@ -26,6 +22,14 @@
 
     &.good {
       background-color: rgb(25, 204, 25);
+    }
+
+    &.past {
+      background-color: rgb(214, 50, 21);
+    }
+
+    &.coming {
+      background-color: rgb(219, 216, 30);
     }
   }
 
@@ -37,15 +41,13 @@
   }
 }
 
-.open-icon {
-  font-size: 16px;
-  color: rgb(17, 130, 175);
-}
-
-.show-more {
-  font-size: 12px;
+.clickable {
   cursor: pointer;
   color: rgb(17, 130, 175);
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .headers {

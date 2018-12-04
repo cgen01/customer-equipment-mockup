@@ -1,11 +1,30 @@
 import React, {useEffect} from 'react'
-import {Grid} from 'semantic-ui-react'
+import moment from 'moment'
+import {Grid, Popup} from 'semantic-ui-react'
 
 import {commonSort} from '../../helpers'
 
 import {headersArray, useHeaders} from './table'
 
 import './tableNew.scss'
+
+const StatusIcon = ({date, ...rest}) => {
+  const status =
+    moment().isAfter(moment(date).subtract(45, 'days')) &&
+    moment().isBefore(date)
+      ? 'coming'
+      : moment().isAfter(date)
+      ? 'past'
+      : 'good'
+
+  return <span className={`status ${status}`} />
+}
+
+const HeaderSpan = ({title, ...rest}) => (
+  <div className="header" {...rest}>
+    {title}
+  </div>
+)
 
 export default ({equipment, onSelectEquipment}) => {
   const [headers, setSortOrder] = useHeaders(headersArray)
@@ -23,12 +42,6 @@ export default ({equipment, onSelectEquipment}) => {
     [headers, equipment],
   )
 
-  const HeaderSpan = ({title, ...rest}) => (
-    <div className="header" {...rest}>
-      {title}
-    </div>
-  )
-
   return (
     <>
       <div className="headers">
@@ -38,97 +51,118 @@ export default ({equipment, onSelectEquipment}) => {
               <HeaderSpan title="Status" style={{textAlign: 'center'}} />
             </Grid.Column>
 
-            <Grid.Column computer={4}>
-              <HeaderSpan title="Name / Description" />
-            </Grid.Column>
-
-            <Grid.Column computer={3}>
-              <HeaderSpan title="Barcode ID" />
-            </Grid.Column>
-
-            <Grid.Column computer={3}>
+            <Grid.Column computer={2}>
               <HeaderSpan title="Type" />
             </Grid.Column>
 
-            <Grid.Column computer={3}>
+            <Grid.Column computer={5}>
+              <HeaderSpan title="Name / Description" />
+            </Grid.Column>
+
+            <Grid.Column computer={2}>
+              <HeaderSpan title="Details" />
+            </Grid.Column>
+
+            <Grid.Column computer={2}>
               <HeaderSpan title="Customer / Contact" />
             </Grid.Column>
 
-            <Grid.Column computer={1}>
-              <HeaderSpan title="Job Count" />
+            <Grid.Column computer={2}>
+              <HeaderSpan title="Address" />
+            </Grid.Column>
+
+            <Grid.Column computer={2} textAlign="right">
+              <HeaderSpan title="Service Dates" />
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </div>
 
       {sortedEquipment.length > 0 ? (
-        sortedEquipment.map(e => {
-          return (
-            <div className="card">
-              <Grid>
-                <Grid.Row style={{paddingBottom: 0}}>
-                  <Grid.Column
-                    computer={1}
-                    textAlign="center"
-                    verticalAlign="middle"
-                  >
-                    <span className="status good" />
-                  </Grid.Column>
+        sortedEquipment.map(e => (
+          <div className="card">
+            <Grid>
+              <Grid.Row>
+                <Grid.Column
+                  computer={1}
+                  textAlign="center"
+                  verticalAlign="middle"
+                >
+                  <StatusIcon date={e.nextServiceDue} />
+                </Grid.Column>
 
-                  <Grid.Column computer={4} verticalAlign="middle">
-                    <div>{e.name}</div>
-                    <div>{e.description}</div>
-                  </Grid.Column>
+                <Grid.Column computer={2} verticalAlign="middle">
+                  {e.type}
+                </Grid.Column>
 
-                  <Grid.Column
-                    className="clickable"
-                    computer={3}
-                    onClick={() => onSelectEquipment(e.id)}
-                    verticalAlign="middle"
-                  >
-                    {e.barcodeId}
-                  </Grid.Column>
+                <Grid.Column
+                  computer={5}
+                  onClick={() => onSelectEquipment(e.id)}
+                >
+                  <div>
+                    <span className="title">Name</span>
+                    <span className="clickable">{e.name}</span>
+                  </div>
 
-                  <Grid.Column computer={3} verticalAlign="middle">
-                    {e.type}
-                  </Grid.Column>
+                  <div>
+                    <span className="title">Description</span>
+                    {e.description}
+                  </div>
+                </Grid.Column>
 
-                  <Grid.Column computer={3} verticalAlign="middle">
-                    <div>{e.customer}</div>
-                    <div>{e.contact}</div>
-                  </Grid.Column>
+                <Grid.Column computer={2}>
+                  <div>
+                    <span className="title">Manufacturer</span>
+                    {e.manufacturer}
+                  </div>
 
-                  <Grid.Column
-                    computer={1}
-                    textAlign="center"
-                    verticalAlign="middle"
-                  >
-                    {e.jobCount}
-                  </Grid.Column>
+                  <div>
+                    <span className="title">Model</span>
+                    {e.model}
+                  </div>
 
-                  <Grid.Column
-                    className="clickable"
-                    computer={1}
-                    onClick={() => onSelectEquipment(e.id)}
-                    textAlign="center"
-                    verticalAlign="middle"
-                  >
-                    <i className="zmdi zmdi-chevron-right open-icon" />
-                  </Grid.Column>
-                </Grid.Row>
+                  <div>
+                    <span className="title">Serial</span>
+                    {e.serial}
+                  </div>
+                </Grid.Column>
 
-                <Grid.Row>
-                  <Grid.Column width={12}>
-                    <div className="show-more">
-                      <i className={`zmdi zmdi-chevron-right`} />
-                      &nbsp; Show More
-                    </div>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </div>
-          )
-        })
+                <Grid.Column computer={2}>
+                  <div>
+                    <span className="title">Customer</span>
+                    {e.customer}
+                  </div>
+
+                  <div>
+                    <span className="title">Contact</span>
+                    {e.contact}
+                  </div>
+                </Grid.Column>
+
+                <Grid.Column computer={2} verticalAlign="middle">
+                  {e.serviceLocation}
+                </Grid.Column>
+
+                <Grid.Column computer={2} textAlign="right">
+                  <div>
+                    <span className="title">Install Date</span>
+                    {moment(e.installDate).format('MM/DD/YYYY')}
+                  </div>
+
+                  <div>
+                    <span className="title">Last Service Date</span>
+                    {moment(e.lastServiceDate).format('MM/DD/YYYY')}
+                  </div>
+
+                  <div>
+                    <span className="title">Next Service Due</span>
+                    {moment(e.nextServiceDue).format('MM/DD/YYYY')}
+                  </div>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </div>
+        ))
       ) : (
         <div style={{textAlign: 'center'}}>
           <em>No Customer Equipment to Display.</em>
