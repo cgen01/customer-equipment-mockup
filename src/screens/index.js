@@ -47,11 +47,7 @@ export default () => {
     [selectedEquipmentId],
   )
 
-  const handleSelectEquipment = (e, id) => {
-    e.preventDefault()
-
-    setSelectedEquipmentId(id)
-  }
+  const handleSelectEquipment = id => setSelectedEquipmentId(id)
 
   const handleNewEquipment = () => setSelectedEquipmentId(0)
 

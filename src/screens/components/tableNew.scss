@@ -7,22 +7,22 @@
   box-shadow: 0 3px 5px rgba(122, 122, 122, 0.05);
 
   &:hover {
-    cursor: pointer;
     border-color: #fdfdfd;
     background-color: #f8f8f8;
     transition: all 150ms ease-in-out;
     box-shadow: 0 3px 10px rgba(122, 122, 122, 0.18);
   }
 
+  & .clickable {
+    cursor: pointer;
+  }
+
   & .status {
-    top: 50%;
-    left: 50%;
     width: 6px;
     height: 6px;
-    margin-top: -3px;
-    margin-left: -3px;
+    display: block;
+    margin: 0 auto;
     border-radius: 50%;
-    position: absolute;
 
     &.good {
       background-color: rgb(25, 204, 25);
@@ -30,9 +30,30 @@
   }
 
   & .title {
+    color: #bbb;
     display: block;
-    color: rgb(187, 187, 187);
     font-size: 10px;
+    text-transform: uppercase;
+  }
+}
+
+.open-icon {
+  font-size: 16px;
+  color: rgb(17, 130, 175);
+}
+
+.show-more {
+  font-size: 12px;
+  cursor: pointer;
+  color: rgb(17, 130, 175);
+}
+
+.headers {
+  padding: 0 15px;
+
+  .header {
+    color: #bbb;
+    font-size: 11px;
     text-transform: uppercase;
   }
 }
