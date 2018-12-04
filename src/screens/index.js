@@ -4,8 +4,8 @@ import {Dimmer} from 'semantic-ui-react'
 import {getEquipment} from '../api/request'
 import {generateRandomNumber, pad} from '../helpers'
 
-import Table from './components/table-new'
 import Header from './components/header'
+import Table from './components/tableNew'
 import Settings from './components/settings'
 import QuickView from './components/quickView'
 
