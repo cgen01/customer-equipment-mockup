@@ -10,14 +10,14 @@ export const statuses = [
     value: 'past',
   },
   {
-    key: 'coming',
-    text: 'Coming',
-    value: 'coming',
+    key: 'upcoming',
+    text: 'Upcoming',
+    value: 'upcoming',
   },
   {
-    key: 'good',
-    text: 'Good',
-    value: 'good',
+    key: 'future',
+    text: 'Future',
+    value: 'future',
   },
 ]
 

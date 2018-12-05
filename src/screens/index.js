@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import moment from 'moment'
 import {Dimmer} from 'semantic-ui-react'
 
 import {getEquipment} from '../api/request'
@@ -9,6 +10,7 @@ import Filter from './components/filter'
 import Table from './components/tableNew'
 import Settings from './components/settings'
 import QuickView from './components/quickView'
+import QuickFilters from './components/quickFilters'
 
 const mainStyles = {
   padding: 50,
@@ -27,7 +29,8 @@ const newEquipmentObject = {
 
 export default () => {
   const [equipment, setEquipment] = useState([])
-  const [showFilters, setShowFilters] = useState(true)
+  const [showFilters, setShowFilters] = useState(false)
+  const [quickFilter, setQuickFilter] = useState('all')
   const [filteredEquipment, setFilteredEquipment] = useState(null)
   const [selectedEquipment, setSelectedEquipment] = useState(null)
   const [selectedEquipmentId, setSelectedEquipmentId] = useState(null)
@@ -97,6 +100,50 @@ export default () => {
         : null,
     )
 
+  const filterByStatus = (e, status) => {
+    if (status === 'none') {
+      return e.filter(x => x.nextServiceDue === null)
+    }
+
+    if (status === 'past') {
+      return e.filter(x => moment().isAfter(x.nextServiceDue))
+    }
+
+    if (status === 'upcoming') {
+      return e.filter(
+        x =>
+          moment().isAfter(moment(x.nextServiceDue).subtract(45, 'days')) &&
+          moment().isBefore(x.nextServiceDue),
+      )
+    }
+
+    if (status === 'future') {
+      return e.filter(
+        x =>
+          x.nextServiceDue !== null &&
+          moment().isBefore(moment(x.nextServiceDue).subtract(45, 'days')),
+      )
+    }
+
+    return e
+  }
+
+  const getQuickFilterData = () => ({
+    all: filterByStatus(equipment, 'all').length,
+    future: filterByStatus(equipment, 'future').length,
+    none: filterByStatus(equipment, 'none').length,
+    past: filterByStatus(equipment, 'past').length,
+    upcoming: filterByStatus(equipment, 'upcoming').length,
+  })
+
+  const handleQuickFilter = status => {
+    setQuickFilter(status)
+
+    const updatedFilteredEquipment = filteredEquipment || equipment
+
+    setFilteredEquipment(filterByStatus(equipment, status))
+  }
+
   const handleFilterChange = filters => {
     const updatedFilteredEquipment = filteredEquipment || equipment
 
@@ -135,6 +182,12 @@ export default () => {
         />
 
         {showFilters && <Filter onApplyFilters={handleFilterChange} />}
+
+        <QuickFilters
+          activeFilter={quickFilter}
+          filterData={getQuickFilterData()}
+          onApplyQuickFilter={handleQuickFilter}
+        />
 
         <Table
           equipment={filteredEquipment || equipment}

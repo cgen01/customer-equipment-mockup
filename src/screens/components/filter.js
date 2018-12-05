@@ -11,7 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 const DateStart = props => <Input {...props} placeholder="Start" />
 const DateEnd = props => (
-  <Input {...props} placeholder="End" style={{marginTop: 5}} />
+  <Input {...props} placeholder="End" style={{marginLeft: 5}} />
 )
 
 export default ({onApplyFilters}) => {
@@ -40,8 +40,10 @@ export default ({onApplyFilters}) => {
 
       <Grid>
         <Grid.Row>
+          <Grid.Column computer={2} />
+
           <Grid.Column computer={4} verticalAlign="middle">
-            <div className="filter">
+            {/* <div className="filter">
               <label>Status</label>
 
               <Dropdown
@@ -54,7 +56,7 @@ export default ({onApplyFilters}) => {
                 selection
                 value={filters.statuses || []}
               />
-            </div>
+            </div> */}
 
             <div className="filter">
               <label>Types</label>
@@ -73,23 +75,6 @@ export default ({onApplyFilters}) => {
               />
             </div>
 
-            <div className="filter">
-              <label>Customer</label>
-
-              <Dropdown
-                fluid
-                multiple
-                onChange={(e, data) => updateFilters('customers', data.value)}
-                options={customers}
-                placeholder="Customers"
-                search
-                selection
-                value={filters.customers || []}
-              />
-            </div>
-          </Grid.Column>
-
-          <Grid.Column computer={4} verticalAlign="middle">
             <div className="filter">
               <label>City</label>
 
@@ -130,6 +115,21 @@ export default ({onApplyFilters}) => {
 
           <Grid.Column computer={4} verticalAlign="middle">
             <div className="filter">
+              <label>Customer</label>
+
+              <Dropdown
+                fluid
+                multiple
+                onChange={(e, data) => updateFilters('customers', data.value)}
+                options={customers}
+                placeholder="Customers"
+                search
+                selection
+                value={filters.customers || []}
+              />
+            </div>
+
+            <div className="filter">
               <label>Manufacturer</label>
 
               <Input
@@ -165,7 +165,7 @@ export default ({onApplyFilters}) => {
             </div>
           </Grid.Column>
 
-          <Grid.Column computer={4}>
+          <Grid.Column computer={6}>
             <div className="filter">
               <label>Install Date</label>
 
