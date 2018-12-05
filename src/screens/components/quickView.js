@@ -74,6 +74,8 @@ export default ({onClose, onSubmit, selectedEquipment}) => {
             />
           </Form.Field>
 
+          <div className="header">Details</div>
+
           <Form.Field>
             <label>Manufacturer</label>
             <input
@@ -91,15 +93,18 @@ export default ({onClose, onSubmit, selectedEquipment}) => {
               value={equipment.model}
             />
           </Form.Field>
-        </Form>
 
-        <div className="more-link">
-          <i className="zmdi zmdi-pencil" />
-          &nbsp;{' '}
-          <a href="#" onClick={handleEditMoreFields}>
-            Edit more fields
-          </a>
-        </div>
+          <Form.Field>
+            <label>Serial</label>
+            <input
+              onChange={e => updateField(e.target.value, 'serial')}
+              placeholder="Serial"
+              value={equipment.serial}
+            />
+          </Form.Field>
+
+          {/* <div className="header">Service Dates</div> */}
+        </Form>
       </div>
 
       <div className="quick-view--actions animation-in">
@@ -111,6 +116,10 @@ export default ({onClose, onSubmit, selectedEquipment}) => {
 
         <Button floated="right" onClick={() => onSubmit(equipment)} primary>
           {equipment.id === 0 ? 'Add' : 'Update'}
+        </Button>
+
+        <Button basic floated="right" onClick={handleEditMoreFields}>
+          Edit more fields
         </Button>
       </div>
     </>

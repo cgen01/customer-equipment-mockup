@@ -30,6 +30,13 @@
     margin-top: 15px;
     text-align: right;
   }
+
+  & .header {
+    padding: 15px 0;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: rgb(172, 172, 172);
+  }
 }
 
 .quick-view--actions {
