@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import moment from 'moment'
-import {Dimmer} from 'semantic-ui-react'
+import {Dimmer, Sticky} from 'semantic-ui-react'
 
 import {getEquipment} from '../api/request'
 import {generateRandomNumber, pad} from '../helpers'
@@ -11,10 +11,6 @@ import Table from './components/tableNew'
 import Settings from './components/settings'
 import QuickView from './components/quickView'
 import QuickFilters from './components/quickFilters'
-
-const mainStyles = {
-  padding: 50,
-}
 
 const newEquipmentObject = {
   id: 0,
@@ -35,6 +31,8 @@ export default () => {
   const [filteredEquipment, setFilteredEquipment] = useState(null)
   const [selectedEquipment, setSelectedEquipment] = useState(null)
   const [selectedEquipmentId, setSelectedEquipmentId] = useState(null)
+
+  const stickyContextRef = useRef(null)
 
   useEffect(() => {
     setEquipment(getEquipment())
@@ -200,29 +198,34 @@ export default () => {
   }
 
   return (
-    <div style={mainStyles}>
+    <div ref={stickyContextRef}>
       <Dimmer.Dimmable dimmed={!!selectedEquipment}>
-        <Header />
+        <Header onAdd={handleNewEquipment} />
 
-        <Settings
-          onAdd={handleNewEquipment}
-          onSearch={handleSearchChange}
-          onToggleFilter={handleToggleShowFilters}
-          searchValue={searchValue}
-        />
+        <div style={{margin: 30}}>
+          <div style={{marginBottom: 20}}>
+            <Settings
+              onSearch={handleSearchChange}
+              onToggleFilter={handleToggleShowFilters}
+              searchValue={searchValue}
+            />
 
-        {showFilters && <Filter onApplyFilters={handleFilterChange} />}
+            {showFilters && <Filter onApplyFilters={handleFilterChange} />}
+          </div>
 
-        <QuickFilters
-          activeFilter={quickFilter}
-          filterData={getQuickFilterData()}
-          onApplyQuickFilter={handleQuickFilter}
-        />
+          <Sticky context={stickyContextRef.current}>
+            <QuickFilters
+              activeFilter={quickFilter}
+              filterData={getQuickFilterData()}
+              onApplyQuickFilter={handleQuickFilter}
+            />
+          </Sticky>
 
-        <Table
-          equipment={filteredEquipment || equipment}
-          onSelectEquipment={handleSelectEquipment}
-        />
+          <Table
+            equipment={filteredEquipment || equipment}
+            onSelectEquipment={handleSelectEquipment}
+          />
+        </div>
 
         <Dimmer
           active={!!selectedEquipment}

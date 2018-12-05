@@ -29,7 +29,7 @@ export default ({onClose, onSubmit, selectedEquipment}) => {
   return (
     <>
       <div className="quick-view animation-in">
-        <h2>{selectedEquipment.name}</h2>
+        <h2>{selectedEquipment.name || 'New Customer Equipment'}</h2>
 
         <hr style={{marginBottom: 20}} />
 

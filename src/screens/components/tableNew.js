@@ -63,7 +63,7 @@ export default ({equipment, onSelectEquipment}) => {
   )
 
   return (
-    <>
+    <div style={{marginTop: 30}}>
       <div className="headers">
         <Grid>
           <Grid.Row>
@@ -185,6 +185,6 @@ export default ({equipment, onSelectEquipment}) => {
           <em>No Customer Equipment to Display.</em>
         </div>
       )}
-    </>
+    </div>
   )
 }
