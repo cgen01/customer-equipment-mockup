@@ -29,6 +29,7 @@ const newEquipmentObject = {
 
 export default () => {
   const [equipment, setEquipment] = useState([])
+  const [searchValue, setSearchValue] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [quickFilter, setQuickFilter] = useState('all')
   const [filteredEquipment, setFilteredEquipment] = useState(null)
@@ -88,7 +89,8 @@ export default () => {
     handleCloseEquipment()
   }
 
-  const handleSearchChange = (e, {value}) =>
+  const handleSearchChange = (e, {value}) => {
+    setSearchValue(value)
     setFilteredEquipment(
       value
         ? equipment.filter(
@@ -99,6 +101,7 @@ export default () => {
           )
         : null,
     )
+  }
 
   const filterByStatus = (e, status) => {
     if (status === 'none') {
@@ -137,37 +140,63 @@ export default () => {
   })
 
   const handleQuickFilter = status => {
+    setSearchValue('')
     setQuickFilter(status)
-
-    const updatedFilteredEquipment = filteredEquipment || equipment
-
     setFilteredEquipment(filterByStatus(equipment, status))
   }
 
   const handleFilterChange = filters => {
-    const updatedFilteredEquipment = filteredEquipment || equipment
-
-    if (filters.equipmentTypes && filters.equipmentTypes.length > 0) {
-      updatedFilteredEquipment.filter(x =>
-        filters.equipmentTypes.includes(x.type),
-      )
-    }
-
-    if (filters.customers && filters.customers.length > 0) {
-      updatedFilteredEquipment.filter(x =>
-        filters.customers.includes(x.customer),
-      )
-    }
-
-    if (filters.manufacturer && filters.manufacturer.length > 0) {
-      updatedFilteredEquipment.filter(x =>
-        x.manufacturer
-          .toLowerCase()
-          .includes(filters.manufacturer.toLowerCase()),
-      )
-    }
-
-    setFilteredEquipment(updatedFilteredEquipment)
+    setQuickFilter('all')
+    setFilteredEquipment(
+      equipment.filter(x => {
+        if (
+          (filters.equipmentTypes &&
+            filters.equipmentTypes.length > 0 &&
+            !filters.equipmentTypes.includes(x.type)) ||
+          (filters.customers &&
+            filters.customers.length > 0 &&
+            !filters.customers.includes(x.customer)) ||
+          (filters.manufacturer &&
+            filters.manufacturer.length > 0 &&
+            !x.manufacturer
+              .toLowerCase()
+              .includes(filters.manufacturer.toLowerCase())) ||
+          (filters.model &&
+            filters.model.length > 0 &&
+            !x.model.toLowerCase().includes(filters.model.toLowerCase())) ||
+          (filters.serial &&
+            filters.serial.length > 0 &&
+            !x.serial.toLowerCase().includes(filters.serial.toLowerCase())) ||
+          (filters.installDateStart &&
+            filters.installDateEnd &&
+            filters.installDateStart.length > 0 &&
+            filters.installDateEnd.length > 0 &&
+            !moment(x.installDate).isBetween(
+              moment(filters.installDateStart),
+              moment(filters.installDateEnd),
+            )) ||
+          (filters.lastServiceDateStart &&
+            filters.lastServiceDateEnd &&
+            filters.lastServiceDateStart.length > 0 &&
+            filters.lastServiceDateEnd.length > 0 &&
+            !moment(x.lastServiceDate).isBetween(
+              moment(filters.lastServiceDateStart),
+              moment(filters.lastServiceDateEnd),
+            )) ||
+          (filters.nextServiceDueStart &&
+            filters.nextServiceDueEnd &&
+            filters.nextServiceDueStart.length > 0 &&
+            filters.nextServiceDueEnd.length > 0 &&
+            !moment(x.nextServiceDue).isBetween(
+              moment(filters.nextServiceDueStart),
+              moment(filters.nextServiceDueEnd),
+            ))
+        ) {
+          return false
+        }
+        return true
+      }),
+    )
   }
 
   return (
@@ -179,6 +208,7 @@ export default () => {
           onAdd={handleNewEquipment}
           onSearch={handleSearchChange}
           onToggleFilter={handleToggleShowFilters}
+          searchValue={searchValue}
         />
 
         {showFilters && <Filter onApplyFilters={handleFilterChange} />}

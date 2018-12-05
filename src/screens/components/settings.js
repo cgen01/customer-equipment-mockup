@@ -9,7 +9,7 @@ import {
   Checkbox,
 } from 'semantic-ui-react'
 
-export default ({onAdd, onSearch, onToggleFilter}) => {
+export default ({onAdd, onSearch, onToggleFilter, searchValue}) => {
   const [onMobile, setOnMobile] = useState(false)
   const [searchCustomFields, setSearchCustomFields] = useState(false)
 
@@ -82,6 +82,7 @@ export default ({onAdd, onSearch, onToggleFilter}) => {
             onChange={onSearch}
             placeholder="Search..."
             style={{marginRight: 15}}
+            value={searchValue}
           />
 
           <Dropdown
