@@ -9,7 +9,7 @@ import {
   Checkbox,
 } from 'semantic-ui-react'
 
-export default ({onAdd, onSearch}) => {
+export default ({onAdd, onSearch, onToggleFilter}) => {
   const [onMobile, setOnMobile] = useState(false)
   const [searchCustomFields, setSearchCustomFields] = useState(false)
 
@@ -28,19 +28,20 @@ export default ({onAdd, onSearch}) => {
     >
       <Grid>
         <Grid.Column computer={6} floated="left" mobile={16} tablet={6}>
-          <Form>
-            <Form.Group widths="equal">
-              <Button
-                fluid={onMobile}
-                onClick={onAdd}
-                primary
-                style={{marginRight: 15, marginLeft: 8}}
-              >
-                <i className="zmdi zmdi-plus" />
-                &nbsp; Add
-              </Button>
-            </Form.Group>
-          </Form>
+          <Button
+            fluid={onMobile}
+            onClick={onAdd}
+            primary
+            style={{marginRight: 15, marginLeft: 8}}
+          >
+            <i className="zmdi zmdi-plus" />
+            &nbsp; Add
+          </Button>
+
+          <Button fluid={onMobile} onClick={onToggleFilter}>
+            <i className="zmdi zmdi-filter-list" />
+            &nbsp; Filter
+          </Button>
         </Grid.Column>
 
         <Grid.Column

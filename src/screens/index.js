@@ -5,6 +5,7 @@ import {getEquipment} from '../api/request'
 import {generateRandomNumber, pad} from '../helpers'
 
 import Header from './components/header'
+import Filter from './components/filter'
 import Table from './components/tableNew'
 import Settings from './components/settings'
 import QuickView from './components/quickView'
@@ -26,6 +27,7 @@ const newEquipmentObject = {
 
 export default () => {
   const [equipment, setEquipment] = useState([])
+  const [showFilters, setShowFilters] = useState(true)
   const [filteredEquipment, setFilteredEquipment] = useState(null)
   const [selectedEquipment, setSelectedEquipment] = useState(null)
   const [selectedEquipmentId, setSelectedEquipmentId] = useState(null)
@@ -52,6 +54,8 @@ export default () => {
   const handleNewEquipment = () => setSelectedEquipmentId(0)
 
   const handleCloseEquipment = () => setSelectedEquipmentId(null)
+
+  const handleToggleShowFilters = () => setShowFilters(prevVal => !prevVal)
 
   const handleUpdateEquipment = updatedEquipment => {
     setEquipment(prevEquipment => {
@@ -93,12 +97,44 @@ export default () => {
         : null,
     )
 
+  const handleFilterChange = filters => {
+    const updatedFilteredEquipment = filteredEquipment || equipment
+
+    if (filters.equipmentTypes && filters.equipmentTypes.length > 0) {
+      updatedFilteredEquipment.filter(x =>
+        filters.equipmentTypes.includes(x.type),
+      )
+    }
+
+    if (filters.customers && filters.customers.length > 0) {
+      updatedFilteredEquipment.filter(x =>
+        filters.customers.includes(x.customer),
+      )
+    }
+
+    if (filters.manufacturer && filters.manufacturer.length > 0) {
+      updatedFilteredEquipment.filter(x =>
+        x.manufacturer
+          .toLowerCase()
+          .includes(filters.manufacturer.toLowerCase()),
+      )
+    }
+
+    setFilteredEquipment(updatedFilteredEquipment)
+  }
+
   return (
     <div style={mainStyles}>
       <Dimmer.Dimmable dimmed={!!selectedEquipment}>
         <Header />
 
-        <Settings onAdd={handleNewEquipment} onSearch={handleSearchChange} />
+        <Settings
+          onAdd={handleNewEquipment}
+          onSearch={handleSearchChange}
+          onToggleFilter={handleToggleShowFilters}
+        />
+
+        {showFilters && <Filter onApplyFilters={handleFilterChange} />}
 
         <Table
           equipment={filteredEquipment || equipment}

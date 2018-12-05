@@ -178,7 +178,7 @@ const equipment = [
     serial: 370037,
     installDate: '2007-01-23 15:23:05',
     lastServiceDate: '2018-09-12 22:09:38',
-    nextServiceDue: '2019-03-02 19:39:11',
+    nextServiceDue: null,
   },
   {
     id: 10,

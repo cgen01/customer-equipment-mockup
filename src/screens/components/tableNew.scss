@@ -14,8 +14,8 @@
   }
 
   & .status {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     display: block;
     margin: 0 auto;
     border-radius: 50%;
@@ -30,6 +30,11 @@
 
     &.coming {
       background-color: rgb(219, 216, 30);
+    }
+
+    &.none {
+      border: 1px solid #ccc;
+      background-color: transparent;
     }
   }
 

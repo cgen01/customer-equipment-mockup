@@ -10,14 +10,34 @@ import './tableNew.scss'
 
 const StatusIcon = ({date, ...rest}) => {
   const status =
-    moment().isAfter(moment(date).subtract(45, 'days')) &&
-    moment().isBefore(date)
+    date === null
+      ? 'none'
+      : moment().isAfter(moment(date).subtract(45, 'days')) &&
+        moment().isBefore(date)
       ? 'coming'
       : moment().isAfter(date)
       ? 'past'
       : 'good'
+  let content = 'This equipment does not have a next service date.'
 
-  return <span className={`status ${status}`} />
+  if (status === 'coming') {
+    content = 'This equipment will need to be serviced soon.'
+  } else if (status === 'past') {
+    content = 'This equipment needs to be serviced as soon as possible.'
+  } else if (status === 'good') {
+    content = 'This equipment is in good condition right now.'
+  }
+
+  return (
+    <Popup
+      content={content}
+      horizontalOffset={13}
+      inverted
+      size="tiny"
+      trigger={<span className={`status ${status}`} />}
+      verticalOffset={5}
+    />
+  )
 }
 
 const HeaderSpan = ({title, ...rest}) => (
@@ -95,48 +115,45 @@ export default ({equipment, onSelectEquipment}) => {
                   {e.type}
                 </Grid.Column>
 
-                <Grid.Column
-                  computer={5}
-                  onClick={() => onSelectEquipment(e.id)}
-                >
-                  <div>
+                <Grid.Column computer={5}>
+                  <div onClick={() => onSelectEquipment(e.id)}>
                     <span className="title">Name</span>
                     <span className="clickable">{e.name}</span>
                   </div>
 
-                  <div>
+                  <>
                     <span className="title">Description</span>
                     {e.description}
-                  </div>
+                  </>
                 </Grid.Column>
 
                 <Grid.Column computer={2}>
-                  <div>
+                  <>
                     <span className="title">Manufacturer</span>
                     {e.manufacturer}
-                  </div>
+                  </>
 
-                  <div>
+                  <>
                     <span className="title">Model</span>
                     {e.model}
-                  </div>
+                  </>
 
-                  <div>
+                  <>
                     <span className="title">Serial</span>
                     {e.serial}
-                  </div>
+                  </>
                 </Grid.Column>
 
                 <Grid.Column computer={2}>
-                  <div>
+                  <>
                     <span className="title">Customer</span>
                     {e.customer}
-                  </div>
+                  </>
 
-                  <div>
+                  <>
                     <span className="title">Contact</span>
                     {e.contact}
-                  </div>
+                  </>
                 </Grid.Column>
 
                 <Grid.Column computer={2} verticalAlign="middle">
@@ -144,20 +161,20 @@ export default ({equipment, onSelectEquipment}) => {
                 </Grid.Column>
 
                 <Grid.Column computer={2} textAlign="right">
-                  <div>
+                  <>
                     <span className="title">Install Date</span>
                     {moment(e.installDate).format('MM/DD/YYYY')}
-                  </div>
+                  </>
 
-                  <div>
+                  <>
                     <span className="title">Last Service Date</span>
                     {moment(e.lastServiceDate).format('MM/DD/YYYY')}
-                  </div>
+                  </>
 
-                  <div>
+                  <>
                     <span className="title">Next Service Due</span>
                     {moment(e.nextServiceDue).format('MM/DD/YYYY')}
-                  </div>
+                  </>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
